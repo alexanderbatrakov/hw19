@@ -22,7 +22,7 @@ public class DemoShopAPITests {
     }
 
     @Test
-    void addShoesToCard(){
+    void addShoesToCard() {
 
         String data = "product_attribute_28_7_10=25&product_attribute_28_1_11=29&addtocart_28.EnteredQuantity=1";
         String authorizationCookie =
@@ -39,7 +39,7 @@ public class DemoShopAPITests {
         getWebDriver().manage().addCookie(
                 new Cookie("NOPCOMMERCE.AUTH", authorizationCookie));
 
-     AddToCard addToCard = given()
+        AddToCard addToCard = given()
                 .contentType("application/x-www-form-urlencoded; charset=UTF-8")
                 .cookie("NOPCOMMERCE.AUTH", authorizationCookie)
                 .body(data)
@@ -47,7 +47,7 @@ public class DemoShopAPITests {
                 .post("/addproducttocart/details/28/1")
                 .then()
                 .statusCode(200)
-             .extract().as(AddToCard.class);
+                .extract().as(AddToCard.class);
         Assertions.assertEquals(true, addToCard.getSuccess());
         Assertions.assertEquals("The product has been added to your <a href=\"/cart\">shopping cart</a>", addToCard.getMessage());
 
