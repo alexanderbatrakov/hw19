@@ -9,11 +9,9 @@ import org.openqa.selenium.Cookie;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
-
-public class DemoShopAPITests {
+public class DemoShopAPITestsGroovy {
 
     @BeforeAll
     static void configureBaseUrl() {
@@ -39,7 +37,7 @@ public class DemoShopAPITests {
         getWebDriver().manage().addCookie(
                 new Cookie("NOPCOMMERCE.AUTH", authorizationCookie));
 
-     AddToCard addToCard = given()
+                given()
                 .contentType("application/x-www-form-urlencoded; charset=UTF-8")
                 .cookie("NOPCOMMERCE.AUTH", authorizationCookie)
                 .body(data)
@@ -47,9 +45,11 @@ public class DemoShopAPITests {
                 .post("/addproducttocart/details/28/1")
                 .then()
                 .statusCode(200)
-             .extract().as(AddToCard.class);
-        Assertions.assertEquals(true, addToCard.getSuccess());
-        Assertions.assertEquals("The product has been added to your <a href=\"/cart\">shopping cart</a>", addToCard.getMessage());
+             .body("success",is(true))
+                .body("message", is("The product has been added to your <a href=\"/cart\">shopping cart</a>"));
+
+//        Assertions.assertEquals(true, addToCard.getSuccess());
+//        Assertions.assertEquals("The product has been added to your <a href=\"/cart\">shopping cart</a>", addToCard.getMessage());
 
     }
 
